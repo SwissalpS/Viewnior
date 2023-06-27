@@ -1077,8 +1077,8 @@ window_realize_cb(GtkWidget *widget, gpointer user_data)
     {
         if ( VNR_WINDOW(widget)->prefs->start_maximized ) {
             vnr_window_open(VNR_WINDOW(widget), FALSE);
-        } 
-        else 
+        }
+        else
         {
             GdkScreen *screen;
             GdkRectangle monitor;
