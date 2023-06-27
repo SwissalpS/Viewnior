@@ -2060,6 +2060,19 @@ vnr_window_key_press (GtkWidget *widget, GdkEventKey *event)
         case GDK_KEY_space:
             if (toolbar_focus_child != NULL || msg_area_focus_child != NULL)
                 break;
+
+            if (window->slideshow) {
+              if (VNR_WINDOW_MODE_SLIDESHOW == window->mode) {
+                stop_slideshow(window);
+                result = TRUE;
+                break;
+              } else if (VNR_WINDOW_MODE_FULLSCREEN == window->mode) {
+                start_slideshow(window);
+                result = TRUE;
+                break;
+              }
+            }
+
             vnr_window_next(window, TRUE);
             result = TRUE;
             break;
