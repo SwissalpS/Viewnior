@@ -2097,6 +2097,10 @@ vnr_window_key_press (GtkWidget *widget, GdkEventKey *event)
         case 'c':
             vnr_window_cmd_crop(NULL, window);
             break;
+        case 'r':
+            vnr_window_random(window);
+            result = TRUE;
+            break;
     }
 
     if (result == FALSE && GTK_WIDGET_CLASS (vnr_window_parent_class)->key_press_event)
@@ -2760,6 +2764,53 @@ vnr_window_last (VnrWindow *window){
     }
 
     window->file_list = prev;
+
+    if(!window->cursor_is_hidden)
+        gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(window)),
+                              gdk_cursor_new(GDK_WATCH));
+    /* This makes the cursor show NOW */
+    gdk_flush();
+
+    vnr_window_open(window, FALSE);
+    if(!window->cursor_is_hidden)
+        gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(window)),
+                              gdk_cursor_new(GDK_LEFT_PTR));
+    return TRUE;
+}
+
+gboolean
+vnr_window_random (VnrWindow *window)
+{
+    GList *prev;
+    prev = g_list_first(window->file_list);
+    if(NULL == prev) return FALSE;
+
+    guint len_full;
+    // There is no point in randomizing if there is only one in list
+    len_full = g_list_length(prev);
+    if(2 > len_full) return FALSE;
+
+    GList *new;
+    guint pos;
+    guint len_new;
+    guint len_old;
+    len_old = g_list_length(window->file_list);
+    len_new = len_old;
+    // True randomness is confusing, so we loop until we get another index
+    // than the one currently shown to user.
+    while (len_new == len_old)
+    {
+        pos = g_random_int_range(0, len_full);
+        new = g_list_nth(prev, pos);
+        len_new = g_list_length(new);
+    }
+
+    if(vnr_message_area_is_critical(VNR_MESSAGE_AREA(window->msg_area)))
+    {
+        vnr_message_area_hide(VNR_MESSAGE_AREA(window->msg_area));
+    }
+
+    window->file_list = new;
 
     if(!window->cursor_is_hidden)
         gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(window)),
