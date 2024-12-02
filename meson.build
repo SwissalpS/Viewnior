@@ -1,5 +1,5 @@
 project('viewnior', 'c', 'cpp',
-  version: '1.8.2',
+  version: '1.8.3',
   license: 'GPL3+',
   meson_version: '>= 0.43.0'
 )

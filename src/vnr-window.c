@@ -2057,6 +2057,11 @@ vnr_window_key_press (GtkWidget *widget, GdkEventKey *event)
             else
                 gtk_main_quit();
             break;
+        case GDK_KEY_KP_Multiply:
+        case '*':
+            vnr_window_toggle_fav(window);
+            result = TRUE;
+            break;
         case GDK_KEY_space:
             if (toolbar_focus_child != NULL || msg_area_focus_child != NULL)
                 break;
@@ -2822,6 +2827,16 @@ vnr_window_random (VnrWindow *window)
     if(!window->cursor_is_hidden)
         gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(window)),
                               gdk_cursor_new(GDK_LEFT_PTR));
+    return TRUE;
+}
+
+gboolean
+vnr_window_toggle_fav (VnrWindow *window)
+{
+g_message("fav/unfav current image");
+    GList *prev;
+    prev = g_list_first(window->file_list);
+    if(NULL == prev) return FALSE;
     return TRUE;
 }
 
