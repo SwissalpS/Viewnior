@@ -2368,6 +2368,10 @@ vnr_window_init (VnrWindow * window)
     window->popup_menu = gtk_ui_manager_get_widget (window->ui_mngr, "/PopupMenu");
     g_assert(GTK_IS_WIDGET(window->popup_menu));
 
+if (!GTK_IS_WIDGET(window->view)) {
+    g_print("Error: window->view no es un widget válido\n");
+    return;
+}
 
 GtkWidget *current_parent = gtk_widget_get_parent(window->view);
 if (current_parent != NULL) {
@@ -2383,6 +2387,11 @@ gtk_fixed_put(GTK_FIXED(fixed), window->view, 0, 0);
 GtkWidget *overlay_label = gtk_label_new("Overlay Text");
 gtk_fixed_put(GTK_FIXED(fixed), overlay_label, 10, 10);
 
+
+if (!GTK_IS_WIDGET(overlay_label)) {
+    g_print("Error: overlay_label no es un widget válido\n");
+    return;
+}
 
 
     gtk_ui_manager_ensure_update (window->ui_mngr);
