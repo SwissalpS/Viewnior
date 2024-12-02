@@ -2175,6 +2175,7 @@ vnr_window_init (VnrWindow * window)
 
     window->writable_format_name = NULL;
     window->file_list = NULL;
+    window->fav_list = NULL;
     window->fs_controls = NULL;
     window->fs_source = NULL;
     window->ss_timeout = 5;
@@ -2366,6 +2367,23 @@ vnr_window_init (VnrWindow * window)
 
     window->popup_menu = gtk_ui_manager_get_widget (window->ui_mngr, "/PopupMenu");
     g_assert(GTK_IS_WIDGET(window->popup_menu));
+
+
+GtkWidget *current_parent = gtk_widget_get_parent(window->view);
+if (current_parent != NULL) {
+    gtk_container_remove(GTK_CONTAINER(current_parent), window->view);
+}
+GtkWidget *fixed = gtk_fixed_new();
+gtk_container_add(GTK_CONTAINER(window->layout), fixed);
+
+// Añade el visor de imágenes
+gtk_fixed_put(GTK_FIXED(fixed), window->view, 0, 0);
+
+// Añade el widget de superposición
+GtkWidget *overlay_label = gtk_label_new("Overlay Text");
+gtk_fixed_put(GTK_FIXED(fixed), overlay_label, 10, 10);
+
+
 
     gtk_ui_manager_ensure_update (window->ui_mngr);
     gtk_widget_show_all(window->menus);

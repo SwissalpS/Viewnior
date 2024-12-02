@@ -74,6 +74,8 @@ struct _VnrWindow {
 
     GtkWidget *view;
     GtkWidget *scroll_view;
+    GtkWidget *fixed;
+    GtkWidget *overlay_label;
 
     GList *file_list;
     GList *fav_list;
