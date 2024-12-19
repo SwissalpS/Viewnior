@@ -2857,6 +2857,32 @@ vnr_window_random (VnrWindow *window)
     return TRUE;
 }
 
+
+gchar *
+vnr_fav_path(const gchar *path)
+{
+    gchar *dirname;
+    gchar *basename;
+    gchar *fav_path;
+    GPathBuf pathbuf;
+
+    // /home/u/x.jpg
+    // /home/u
+    dirname = g_path_get_dirname(path);
+    // x.jpg
+    basename = g_path_get_basename(path);
+    g_path_buf_init_from_path (&pathbuf, dirname);
+    g_path_buf_push (&pathbuf, "_ViewniorFavs");
+    g_path_buf_push (&pathbuf, basename);
+    fav_path = g_path_buf_to_path(&pathbuf);
+
+    g_path_buf_clear (&pathbuf);
+    g_free (dirname);
+    g_free (basename);
+
+    return fav_path;
+}
+
 gboolean
 vnr_window_toggle_fav (VnrWindow *window)
 {
