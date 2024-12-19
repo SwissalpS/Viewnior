@@ -1,3 +1,28 @@
+Viewnior 1.8.3
+--------------
+
+SwissalpS added rudementary favourite system.
+Asterisk-key toggles favourite:
+ - a border is shown around the image (can be built to show a
+   label widget at the bottom instead)
+ - a directory is created in current directory holding symlinks to the
+   favourite files. This folder can be opened with Viewnior to present/edit
+   only that selection. These can again be marked as favourites.
+   Currently an external script is needed (not provided in this package)
+   to 'export' the favourite collection.
+
+Viewnior 1.8.2
+--------------
+
+SwissalpS added R-key to advance to a random image.
+
+Viewnior 1.8.1
+--------------
+
+SwissalpS changed space-bar behaviour in slideshow mode. It
+now toggles the slideshow on/off.
+Also added build.sh for easier building.
+
 Viewnior 1.8
 ------------
 
@@ -73,7 +98,7 @@ New features included:
 Fixed:
  - Wallpaper support for XFCE
  - Minor fixes
- 
+
 Viewnior 1.2
 ------------
 
@@ -95,7 +120,7 @@ New features included:
  - Remember window state (maximized) between startups
  - Add "Last Used Mode" zoom option
  - --slideshow argument to start in Slideshow mode
- - Gnome 3.0 ready 
+ - Gnome 3.0 ready
 
 Fixed:
  - Remove deprecated gtk+/glib symbols
