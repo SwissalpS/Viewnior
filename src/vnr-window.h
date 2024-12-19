@@ -24,6 +24,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include "vnr-prefs.h"
+#include "vnr-file.h"
 
 G_BEGIN_DECLS
 
@@ -74,11 +75,9 @@ struct _VnrWindow {
 
     GtkWidget *view;
     GtkWidget *scroll_view;
-    GtkWidget *fixed;
     GtkWidget *overlay_label;
 
     GList *file_list;
-    GList *fav_list;
 
     VnrPrefs *prefs;
 
@@ -130,7 +129,7 @@ gboolean vnr_window_prev     (VnrWindow *win);
 gboolean vnr_window_first    (VnrWindow *win);
 gboolean vnr_window_last     (VnrWindow *win);
 gboolean vnr_window_random   (VnrWindow *win);
-gboolean vnr_window_toggle_fav(VnrWindow *win);
+gboolean vnr_window_toggle_fav (VnrWindow *win);
 void     deny_slideshow      (VnrWindow *window);
 void     vnr_window_apply_preferences (VnrWindow *window);
 void     vnr_window_toggle_fullscreen (VnrWindow *win);

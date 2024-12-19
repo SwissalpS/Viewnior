@@ -34,7 +34,6 @@
 #include "uni-scroll-win.h"
 #include "uni-anim-view.h"
 #include "vnr-tools.h"
-#include "vnr-file.h"
 #include "vnr-message-area.h"
 #include "vnr-properties-dialog.h"
 #include "vnr-crop.h"
@@ -2178,7 +2177,6 @@ vnr_window_init (VnrWindow * window)
 
     window->writable_format_name = NULL;
     window->file_list = NULL;
-    window->fav_list = NULL;
     window->fs_controls = NULL;
     window->fs_source = NULL;
     window->ss_timeout = 5;
@@ -2371,30 +2369,6 @@ vnr_window_init (VnrWindow * window)
     window->popup_menu = gtk_ui_manager_get_widget (window->ui_mngr, "/PopupMenu");
     g_assert(GTK_IS_WIDGET(window->popup_menu));
 
-if (!GTK_IS_WIDGET(window->view)) {
-    g_print("Error: window->view no es un widget válido\n");
-    return;
-}
-
-GtkWidget *current_parent = gtk_widget_get_parent(window->view);
-if (current_parent != NULL) {
-    gtk_container_remove(GTK_CONTAINER(current_parent), window->view);
-}
-GtkWidget *fixed = gtk_fixed_new();
-gtk_container_add(GTK_CONTAINER(window->layout), fixed);
-
-// Añade el visor de imágenes
-gtk_fixed_put(GTK_FIXED(fixed), window->view, 0, 0);
-
-// Añade el widget de superposición
-GtkWidget *overlay_label = gtk_label_new("Overlay Text");
-gtk_fixed_put(GTK_FIXED(fixed), overlay_label, 10, 10);
-
-
-if (!GTK_IS_WIDGET(overlay_label)) {
-    g_print("Error: overlay_label no es un widget válido\n");
-    return;
-}
 
 
     gtk_ui_manager_ensure_update (window->ui_mngr);
@@ -2451,7 +2425,6 @@ if (!GTK_IS_WIDGET(overlay_label)) {
         gtk_widget_hide (window->statusbar);
     else
         gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
-
 
     // Apply scrollbar preference
     action = gtk_action_group_get_action (window->actions_bars,
@@ -2689,7 +2662,8 @@ vnr_window_set_list (VnrWindow *window, GList *list, gboolean free_current)
 }
 
 gboolean
-vnr_window_next (VnrWindow *window, gboolean rem_timeout){
+vnr_window_next (VnrWindow *window, gboolean rem_timeout)
+{
     GList *next;
 
     /* Don't reload current image
@@ -2728,7 +2702,8 @@ vnr_window_next (VnrWindow *window, gboolean rem_timeout){
 }
 
 gboolean
-vnr_window_prev (VnrWindow *window){
+vnr_window_prev (VnrWindow *window)
+{
     GList *prev;
 
     /* Don't reload current image
