@@ -135,6 +135,7 @@ void     deny_slideshow      (VnrWindow *window);
 void     vnr_window_apply_preferences (VnrWindow *window);
 void     vnr_window_toggle_fullscreen (VnrWindow *win);
 
+gboolean vnr_is_fav (const gchar *path);
 gchar *vnr_fav_path (const gchar *path);
 G_END_DECLS
 #endif /* __VNR_WINDOW_H__ */

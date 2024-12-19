@@ -2857,6 +2857,15 @@ vnr_window_random (VnrWindow *window)
     return TRUE;
 }
 
+gboolean
+vnr_is_fav(const gchar *path)
+{
+    gboolean bOut;
+    gchar *fav_path = vnr_fav_path(path);
+    bOut = g_file_test(fav_path, G_FILE_TEST_EXISTS);
+    g_free (fav_path);
+    return bOut;
+}
 
 gchar *
 vnr_fav_path(const gchar *path)
