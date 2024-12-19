@@ -47,6 +47,9 @@
 
 G_DEFINE_TYPE (VnrWindow, vnr_window, GTK_TYPE_WINDOW);
 
+const guint fav_border_width = 7u;
+const gboolean fav_use_label = FALSE;
+
 static void vnr_window_unfullscreen (VnrWindow *window);
 static void stop_slideshow(VnrWindow *window);
 static void start_slideshow(VnrWindow *window);
@@ -2432,6 +2435,10 @@ if (!GTK_IS_WIDGET(overlay_label)) {
     gtk_widget_set_can_focus(window->view, TRUE);
     window->scroll_view = uni_scroll_win_new (UNI_IMAGE_VIEW (window->view));
 
+    if(fav_use_label) {
+        window->overlay_label = gtk_label_new("♥");
+        gtk_box_pack_end(GTK_BOX(window->layout), window->overlay_label, FALSE, FALSE, 0);
+    }
 
     window->statusbar = gtk_statusbar_new();
     gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(window->statusbar), FALSE);
@@ -2915,10 +2922,45 @@ vnr_window_update_fav_indicator(VnrWindow *window, gboolean b)
 gboolean
 vnr_window_toggle_fav (VnrWindow *window)
 {
-g_message("fav/unfav current image");
-    GList *prev;
-    prev = g_list_first(window->file_list);
-    if(NULL == prev) return FALSE;
+    if(window->file_list == NULL)
+        return FALSE;
+
+    VnrFile *vnr_file = VNR_FILE(window->file_list->data);
+    gchar *fav_path = vnr_fav_path(vnr_file->path);
+    GFile *fav_file = g_file_new_for_path(fav_path);
+    gboolean is_fav;
+
+    if(fav_use_label) {
+        is_fav = gtk_widget_get_visible (window->overlay_label);
+    } else {
+        is_fav = 0u < gtk_container_get_border_width (GTK_CONTAINER (window->layout));
+    }
+
+    if(is_fav) {
+        // is fav -> delete
+        // we don't care about errors here
+        g_file_delete(fav_file, NULL, NULL);
+        if(fav_use_label) {
+            gtk_widget_hide(window->overlay_label);
+        } else {
+            gtk_container_set_border_width (GTK_CONTAINER (window->layout), 0u);
+        }
+    } else {
+        // is not fav -> create
+        // create directory in case it doesn't yet exist
+        GFile *fav_dir = g_file_get_parent(fav_file);
+        g_file_make_directory(fav_dir, NULL, NULL);
+        g_object_unref(fav_dir);
+        g_file_make_symbolic_link(fav_file, vnr_file->path, NULL, NULL);
+        if(fav_use_label) {
+            gtk_widget_show(window->overlay_label);
+        } else {
+            gtk_container_set_border_width (GTK_CONTAINER (window->layout), fav_border_width);
+        }
+    }
+
+    g_object_unref(fav_file);
+
     return TRUE;
 }
 
