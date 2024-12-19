@@ -2512,6 +2512,7 @@ vnr_window_open (VnrWindow * window, gboolean fit_to_screen)
 
     file = VNR_FILE(window->file_list->data);
 
+    vnr_window_update_fav_indicator(window, vnr_is_fav(file->path));
     update_fs_filename_label(window);
 
     pixbuf = gdk_pixbuf_animation_new_from_file (file->path, &error);
@@ -2890,6 +2891,25 @@ vnr_fav_path(const gchar *path)
     g_free (basename);
 
     return fav_path;
+}
+
+void
+vnr_window_update_fav_indicator(VnrWindow *window, gboolean b)
+{
+    if(fav_use_label) {
+        if(b) {
+            gtk_widget_show(window->overlay_label);
+        } else {
+            gtk_widget_hide(window->overlay_label);
+        }
+        return;
+    }
+
+    if(b) {
+        gtk_container_set_border_width (GTK_CONTAINER (window->layout), fav_border_width);
+    } else {
+        gtk_container_set_border_width (GTK_CONTAINER (window->layout), 0u);
+    }
 }
 
 gboolean
