@@ -1,5 +1,5 @@
 project('viewnior', 'c', 'cpp',
-  version: '1.8.3',
+  version: '1.8.4',
   license: 'GPL3+',
   meson_version: '>= 0.43.0'
 )
@@ -54,3 +54,4 @@ subdir('man')
 subdir('src')
 
 meson.add_install_script('meson_post_install.py')
+
